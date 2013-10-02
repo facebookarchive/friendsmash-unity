@@ -114,7 +114,7 @@ public class GameStateManager : MonoBehaviour
         query["score"] = Instance.score.ToString();
 
         // xxxxx scores
-        FB.API("/me/scores", Facebook.HttpMethod.POST, delegate(string r) { ; }, query);
+        FB.API("/me/scores", Facebook.HttpMethod.POST, delegate(FBResult r) { Debug.Log("Result: " + r.Text); }, query);
 
         Application.LoadLevel("MainMenu");
         Time.timeScale = 0.0f;

@@ -89,10 +89,10 @@ public class MainMenu : MonoBehaviour
         {
             if (friends != null && friends.Count > 0)
             {
-                Dictionary<string, string> friend = FBUtil.RandomFriend(friends);
+                Dictionary<string, string> friend = Util.RandomFriend(friends);
                 GameStateManager.FriendName = friend["first_name"];
                 GameStateManager.FriendID = friend["id"];
-                StartCoroutine(FBUtil.GetFriendPictureTexture(friend["id"]));
+                FB.API(Util.GetPictureURL((string)friend["id"], 128, 128), Facebook.HttpMethod.GET, Util.FriendPictureCallback);
             }
             
             Application.LoadLevel("GameStage");
@@ -163,46 +163,70 @@ public class MainMenu : MonoBehaviour
         GameStateManager.UserTexture = t;
     }
 
-    void LoginCallback()
+    void LoginCallback(FBResult result)
     {
         FbDebug.Log("call login: " + FB.UserId);
+        FbDebug.Log("login result: " + result.Text);
         FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
-        FB.API ("/app/scores?fields=score,user.limit(20)", Facebook.HttpMethod.GET, ScoresCallback);
+        FB.API(Util.GetPictureURL("me", 128, 128), Facebook.HttpMethod.GET, MyPictureCallback);
+        FB.API("/app/scores?fields=score,user.limit(20)", Facebook.HttpMethod.GET, ScoresCallback);
     }
 
-    void ScoresCallback(string response) 
+    void ScoresCallback(FBResult result) 
     {
+        if (result.Error != null)
+        {
+            Debug.LogError(result.Error);
+            return;
+        }
+
         scores = new Dictionary<string, object>();
-        List<object> scoresList = FBUtil.DeserializeScores(response);
+        List<object> scoresList = Util.DeserializeScores(result.Text);
 
         foreach(object score in scoresList) 
         {
             Dictionary<string,object> entry = (Dictionary<string,object>) score;
             Dictionary<string,object> user = (Dictionary<string,object>) entry["user"];
 
-            scores.Add((string) user["id"], entry);
+            string userId = (string)user["id"];
 
-            StartCoroutine(
-                GetFriendTexture((string)user["id"])
-            );
+            scores.Add(userId, entry);
+            FB.API(Util.GetPictureURL(userId, 128, 128), Facebook.HttpMethod.GET, pictureResult =>
+            {
+                if (pictureResult.Error != null)
+                {
+                    Debug.LogError(pictureResult.Error);
+                }
+                else
+                {
+                    friendImages.Add(userId, pictureResult.Texture);
+                }
+            });
         }
     }
 
-    IEnumerator GetFriendTexture(string uid) {
-        string url = FBUtil.GetPictureURL (uid, 128, 128);
-        WWW www = new WWW(url);
-        yield return www;
-        friendImages.Add(uid, (Texture) www.texture);		
+    void APICallback(FBResult result)
+    {
+        if (result.Error != null)
+        {
+            Debug.LogError(result.Error);
+            return;
+        }
+
+        profile = Util.DeserializeJSONProfile(result.Text);
+        GameStateManager.Username = profile["first_name"];
+        friends = Util.DeserializeJSONFriends(result.Text);
     }
 
-    void APICallback(string response)
+    void MyPictureCallback(FBResult result)
     {
-        profile = FBUtil.DeserializeJSONProfile(response);
-        GameStateManager.Username = profile["first_name"];
-        StartCoroutine(
-            FBUtil.GetPictureTexture(facebookID: FB.UserId, callback: delegate(Texture t) { GameStateManager.UserTexture = t; })
-        );
-        friends = FBUtil.DeserializeJSONFriends(response);
+        if (result.Error != null)
+        {
+            Debug.LogError(result.Error);
+            return;
+        }
+
+        GameStateManager.UserTexture = result.Texture;
     }
 
     void TournamentCallback() {
