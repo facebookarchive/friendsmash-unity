@@ -9,6 +9,7 @@ public class GameStateManager : MonoBehaviour
 
     public static int StartingLives = 3, StartingScore = 0;
     private int lives, score;
+    private int? highScore;
 
     private string username = null;
     public static Texture UserTexture;
@@ -58,6 +59,7 @@ public class GameStateManager : MonoBehaviour
 
     public static GameStateManager Instance { get { return current(); } }
     public static int Score { get { return Instance.score; } }
+    public static int HighScore { get { return Instance.highScore.HasValue ? Instance.highScore.Value : 0; } set { Instance.highScore = value; }}
     public static int LivesRemaining { get { return Instance.lives; } }
     public static string Username
     {
@@ -72,6 +74,7 @@ public class GameStateManager : MonoBehaviour
         instance = container.AddComponent<GameStateManager>();
         instance.lives = StartingLives;
         instance.score = StartingScore;
+        instance.highScore = null;
         current = then;
         return instance;
     };
@@ -110,11 +113,12 @@ public class GameStateManager : MonoBehaviour
         {
             Destroy(t);
         }
-        var query = new Dictionary<string, string>();
-        query["score"] = Instance.score.ToString();
+        FbDebug.Log("EndGame Instance.highScore = " + Instance.highScore + "\nInstance.score = " + Instance.score);
 
-        // xxxxx scores
-        FB.API("/me/scores", Facebook.HttpMethod.POST, delegate(FBResult r) { Debug.Log("Result: " + r.Text); }, query);
+
+        Instance.highScore = Instance.score;
+        FbDebug.Log("Player has new high score :" + Instance.score);
+        
 
         Application.LoadLevel("MainMenu");
         Time.timeScale = 0.0f;

@@ -191,5 +191,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 372241c8db1404a85b6374fdad805060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonTexture: {fileID: 2800000, guid: 85b8733f7ac1b43a79c44fe143ed66e6, type: 3}
+  PlayTexture: {fileID: 2800000, guid: 23478e2b5b99244209fcae0cd0fae353, type: 3}
+  BragTexture: {fileID: 2800000, guid: bf81e3ab0afda465bb6d3d61f00e3c2a, type: 3}
+  ChallengeTexture: {fileID: 2800000, guid: 996e3f704781d43d89e373bbfc897267, type: 3}
+  StoreTexture: {fileID: 2800000, guid: 923f44927c5d14574a1dbd1562cdbf16, type: 3}
+  FullScreenTexture: {fileID: 2800000, guid: 44f916c4d76414764aa2f22e0a98b78b, type: 3}
+  FullScreenActiveTexture: {fileID: 2800000, guid: 1d77f685bafdf42c198204b0266d4ac4,
+    type: 3}
+  ResourcesTexture: {fileID: 2800000, guid: 2f9cbc1e57c674b8aa2d32fd3eec89cd, type: 3}
+  CanvasSize: {x: 1000, y: 600}
+  LoginButtonRect:
+    serializedVersion: 2
+    x: 190
+    y: 114
+    width: 200
+    height: 43
+  ResourcePos: {x: 162, y: 108}
+  ButtonStartPos: {x: -94, y: 182}
+  ButtonScale: .600000024
+  ButtonYGap: 10
+  ChallengeDisplayTime: 4
+  ButtonLogoOffset: {x: 332, y: 0}
+  TournamentStep: 140
   MenuSkin: {fileID: 11400000, guid: 19ecbe5a38115409985fb91294c4ad4a, type: 2}
-  LogoTexture: {fileID: 2800000, guid: fcee03f6549564442af28e63a85c3b54, type: 3}

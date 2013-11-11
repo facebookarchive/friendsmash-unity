@@ -16,8 +16,8 @@ PlayerSettings:
   cursorHotspot: {x: 0, y: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
-  defaultScreenWidthWeb: 960
-  defaultScreenHeightWeb: 600
+  defaultScreenWidthWeb: 946
+  defaultScreenHeightWeb: 572
   m_RenderingPath: 1
   m_ActiveColorSpace: 0
   m_MTRendering: 1
@@ -84,7 +84,7 @@ PlayerSettings:
   CreateWallpaper: 0
   APKExpansionFiles: 0
   StripUnusedMeshComponents: 0
-  iPhoneSdkVersion: 989
+  iPhoneSdkVersion: 988
   iPhoneTargetOSVersion: 10
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
@@ -115,7 +115,7 @@ PlayerSettings:
   - m_BuildTarget: iPhone
     m_StaticBatching: 1
     m_DynamicBatching: 1
-  webPlayerTemplate: APPLICATION:Black Background
+  webPlayerTemplate: APPLICATION:No Context Menu
   m_TemplateCustomTags: {}
   wiiRegion: 1
   wiiGameCode: RABA
@@ -154,10 +154,10 @@ PlayerSettings:
   scriptingDefineSymbols:
     data:
       first: 1
-      second: 
+      second: 21
     data:
       first: 2
-      second: 
+      second: 21
   metroPackageName: 
   metroPackageLogo: 
   metroPackageVersion: 

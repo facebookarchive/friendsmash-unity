@@ -28,7 +28,7 @@ public class Spawner : MonoBehaviour
                 GameObject curr = (GameObject)Instantiate(
                     Target,
                     new Vector3(Random.Range(-150, 150), -100, 0),
-                    new Quaternion(Random.value, Random.value, Random.value, Random.value)
+                    Quaternion.identity
                 );
                 Vector3 force = new Vector3();
                 force.x = curr.transform.position.x <= 0.0f ? 1 : -1;
@@ -37,7 +37,7 @@ public class Spawner : MonoBehaviour
                 force.z = 0;
                 force.Scale(forceScale);
                 curr.rigidbody.AddForce(force, ForceMode.Impulse);
-                curr.rigidbody.angularVelocity = new Vector3(Random.Range(-150, 150), 0, 0);
+                curr.rigidbody.angularVelocity = new Vector3(0,0,Random.Range(-150, 150));
             }
         }
     }
