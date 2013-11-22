@@ -282,9 +282,8 @@ public class MainMenu : MonoBehaviour
             string panelText = "Welcome ";
             
             
-            if (GameStateManager.Username != null) panelText += GameStateManager.Username + "!";
-            else panelText += "Smasher!";
-
+            panelText += (!string.IsNullOrEmpty(GameStateManager.Username)) ? string.Format("{0}!", GameStateManager.Username) : "Smasher!";
+            
             if (GameStateManager.UserTexture != null) 
                 GUI.DrawTexture( (new Rect(8,10, 150, 150)), GameStateManager.UserTexture);
 
@@ -299,7 +298,7 @@ public class MainMenu : MonoBehaviour
         {
             subTitle = "Score: " + GameStateManager.Score.ToString();
         }
-        if (subTitle != null)
+        if (!string.IsNullOrEmpty(subTitle))
         {
             GUI.Label( (new Rect(132, 28, 400, 160)), subTitle, MenuSkin.GetStyle("sub_title"));
         }
