@@ -1,0 +1,294 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+SceneSettings:
+  m_ObjectHideFlags: 0
+  m_PVSData: 
+  m_PVSObjectsArray: []
+  m_PVSPortalsArray: []
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: .25
+    backfaceThreshold: 100
+--- !u!104 &2
+RenderSettings:
+  m_Fog: 0
+  m_FogColor: {r: .5, g: .5, b: .5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: .00999999978
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientLight: {r: .200000003, g: .200000003, b: .200000003, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0ec5ccd5622fd4cf393e46a7e147e46c, type: 2}
+  m_HaloStrength: .5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 0}
+  m_ObjectHideFlags: 0
+--- !u!127 &3
+LevelGameManager:
+  m_ObjectHideFlags: 0
+--- !u!157 &4
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  m_LightProbes: {fileID: 0}
+  m_Lightmaps: []
+  m_LightmapsMode: 1
+  m_BakedColorSpace: 0
+  m_UseDualLightmapsInForward: 0
+  m_LightmapEditorSettings:
+    m_Resolution: 50
+    m_LastUsedResolution: 0
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
+    m_BounceBoost: 1
+    m_BounceIntensity: 1
+    m_SkyLightColor: {r: .860000014, g: .930000007, b: 1, a: 1}
+    m_SkyLightIntensity: 0
+    m_Quality: 0
+    m_Bounces: 1
+    m_FinalGatherRays: 1000
+    m_FinalGatherContrastThreshold: .0500000007
+    m_FinalGatherGradientThreshold: 0
+    m_FinalGatherInterpolationPoints: 15
+    m_AOAmount: 0
+    m_AOMaxDistance: .100000001
+    m_AOContrast: 1
+    m_LODSurfaceMappingDistance: 1
+    m_Padding: 0
+    m_TextureCompression: 0
+    m_LockAtlas: 0
+--- !u!196 &5
+NavMeshSettings:
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    agentRadius: .5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: .400000006
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    accuratePlacement: 0
+    minRegionArea: 2
+    widthInaccuracy: 16.666666
+    heightInaccuracy: 10
+  m_NavMesh: {fileID: 0}
+--- !u!1 &491552202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 491552207}
+  - 20: {fileID: 491552206}
+  - 92: {fileID: 491552205}
+  - 124: {fileID: 491552204}
+  - 81: {fileID: 491552203}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!81 &491552203
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 491552202}
+  m_Enabled: 1
+--- !u!124 &491552204
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 491552202}
+  m_Enabled: 1
+--- !u!92 &491552205
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 491552202}
+  m_Enabled: 1
+--- !u!20 &491552206
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 491552202}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: .100000001
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 100
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_HDR: 0
+  m_OcclusionCulling: 1
+--- !u!4 &491552207
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 491552202}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!1 &2077195017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2077195018}
+  - 114: {fileID: 2077195019}
+  - 114: {fileID: 2077195020}
+  m_Layer: 0
+  m_Name: Main Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2077195018
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2077195017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.6863632, y: 1, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &2077195019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2077195017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372241c8db1404a85b6374fdad805060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTexture: {fileID: 2800000, guid: 85b8733f7ac1b43a79c44fe143ed66e6, type: 3}
+  PlayTexture: {fileID: 2800000, guid: 23478e2b5b99244209fcae0cd0fae353, type: 3}
+  BragTexture: {fileID: 2800000, guid: bf81e3ab0afda465bb6d3d61f00e3c2a, type: 3}
+  ChallengeTexture: {fileID: 2800000, guid: 996e3f704781d43d89e373bbfc897267, type: 3}
+  StoreTexture: {fileID: 2800000, guid: 923f44927c5d14574a1dbd1562cdbf16, type: 3}
+  FullScreenTexture: {fileID: 2800000, guid: 44f916c4d76414764aa2f22e0a98b78b, type: 3}
+  FullScreenActiveTexture: {fileID: 2800000, guid: 1d77f685bafdf42c198204b0266d4ac4,
+    type: 3}
+  ResourcesTexture: {fileID: 2800000, guid: 2f9cbc1e57c674b8aa2d32fd3eec89cd, type: 3}
+  CanvasSize: {x: 1000, y: 600}
+  LoginButtonRect:
+    serializedVersion: 2
+    x: 190
+    y: 114
+    width: 200
+    height: 43
+  ResourcePos: {x: 162, y: 108}
+  ButtonStartPos: {x: -94, y: 176.460007}
+  ButtonScale: .600000024
+  ButtonYGap: 6.69999981
+  ChallengeDisplayTime: 4
+  ButtonLogoOffset: {x: 332, y: 0}
+  TournamentStep: 140
+  MouseScrollStep: 40
+  paymentDialog: {fileID: 0}
+  MenuSkin: {fileID: 11400000, guid: 19ecbe5a38115409985fb91294c4ad4a, type: 2}
+  CoinBalance: 0
+  NumLives: 0
+  NumBombs: 0
+--- !u!114 &2077195020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2077195017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac28060b00cbb42d4971b589cd515222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DialogEnabled: 0
+  MenuSkin: {fileID: 11400000, guid: 19ecbe5a38115409985fb91294c4ad4a, type: 2}
+  PanelHeader: {fileID: 2800000, guid: 2bd52729368d545728935c8a9f0a9ecf, type: 3}
+  PanelBody: {fileID: 2800000, guid: 8a6ba177d2ba145dcb62e1a8c3590f33, type: 3}
+  PanelFooter: {fileID: 2800000, guid: 727df2ba72bfc48c197c27888acafbec, type: 3}
+  PanelHeight: 480
+  CoinsButtonPos: {x: 240, y: 120}
+  ItemsButtonPos: {x: 60, y: 120}
+  InitialPriceItemPos: {x: 40.9000015, y: 200}
+  PriceItemPosDelta: {x: 0, y: 45}
+  PriceItemSize: {x: 357, y: 40}
+  PriceItemFirstIconPos: {x: 9, y: 4}
+  PriceItemSecondIconPos: {x: 182, y: 4}
+  PriceItemSecondTextPos: 165
+  PriceItemCoinTexture: {fileID: 2800000, guid: bfacdb82e9b674151a1528500283d3b7,
+    type: 3}
+  PriceItemBombTexture: {fileID: 2800000, guid: d7981655a16e64d05aab66a05554b04e,
+    type: 3}
+  PriceItemLifeTexture: {fileID: 2800000, guid: 53608e52cc351465bb9c346129107a31,
+    type: 3}
+  PayWithMobileTexture: {fileID: 2800000, guid: ae1f79a49d8574c0a90f775b2cfa4d4a,
+    type: 3}
+  PayWithMobilePos: {x: 131.399994, y: 400.100006}
+  PayByMobileTextRect:
+    serializedVersion: 2
+    x: 132
+    y: 414
+    width: 198
+    height: 37
+  PayByMobileRect:
+    serializedVersion: 2
+    x: 156
+    y: 409
+    width: 165
+    height: 46
+  CloseButtonRect:
+    serializedVersion: 2
+    x: 420
+    y: 16
+    width: 37
+    height: 37
+  BombsRect:
+    serializedVersion: 2
+    x: 240.630005
+    y: 80
+    width: 0
+    height: 0
+  LivesRect:
+    serializedVersion: 2
+    x: 330.160004
+    y: 80
+    width: 0
+    height: 0
+  CoinsRect:
+    serializedVersion: 2
+    x: 151
+    y: 80
+    width: 0
+    height: 0

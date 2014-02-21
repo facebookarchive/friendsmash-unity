@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 4cdbd02f41c654d5d8d3d49206a5fe93
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - FriendTexture: {fileID: 2800000, guid: 7fd85a557ce6544f0b115e5922202f5c, type: 3}
+  - EnemyTexture: {fileID: 2800000, guid: e7393d6a2ff034a24a638d815e599307, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
