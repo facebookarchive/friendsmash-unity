@@ -1,10 +1,9 @@
-*.meta
 friendsmash_payments_start/OG/
 friendsmash_payments_complete/OG/
 *Assembly-CSharp*
-*/Assets/Examples/
-*/Assets/Facebook/
-*/Assets/Plugins/
-*/Library/
+*/Assets/Examples*
+*/Assets/Facebook*
+*/Assets/Plugins*
+*/Library*
 *.sln
 *.userprefs
