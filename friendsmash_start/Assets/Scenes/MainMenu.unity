@@ -4,13 +4,12 @@
 SceneSettings:
   m_ObjectHideFlags: 0
   m_PVSData: 
-  m_QueryMode: 1
   m_PVSObjectsArray: []
   m_PVSPortalsArray: []
   m_OcclusionBakeSettings:
-    viewCellSize: 1
-    bakeMode: 2
-    memoryUsage: 10485760
+    smallestOccluder: 5
+    smallestHole: .25
+    backfaceThreshold: 100
 --- !u!104 &2
 RenderSettings:
   m_Fog: 0
@@ -23,6 +22,7 @@ RenderSettings:
   m_SkyboxMaterial: {fileID: 2100000, guid: 0ec5ccd5622fd4cf393e46a7e147e46c, type: 2}
   m_HaloStrength: .5
   m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
@@ -142,6 +142,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
+  m_OcclusionCulling: 1
 --- !u!4 &491552207
 Transform:
   m_ObjectHideFlags: 0
@@ -162,6 +163,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2077195018}
   - 114: {fileID: 2077195019}
+  - 114: {fileID: 2077195020}
   m_Layer: 0
   m_Name: Main Menu
   m_TagString: Untagged
@@ -208,10 +210,85 @@ MonoBehaviour:
     width: 200
     height: 43
   ResourcePos: {x: 162, y: 108}
-  ButtonStartPos: {x: -94, y: 182}
+  ButtonStartPos: {x: -94, y: 176.460007}
   ButtonScale: .600000024
-  ButtonYGap: 10
+  ButtonYGap: 6.69999981
   ChallengeDisplayTime: 4
   ButtonLogoOffset: {x: 332, y: 0}
   TournamentStep: 140
+  MouseScrollStep: 40
+  paymentDialog: {fileID: 0}
   MenuSkin: {fileID: 11400000, guid: 19ecbe5a38115409985fb91294c4ad4a, type: 2}
+  CoinBalance: 0
+  NumLives: 0
+  NumBombs: 0
+--- !u!114 &2077195020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2077195017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac28060b00cbb42d4971b589cd515222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DialogEnabled: 0
+  MenuSkin: {fileID: 11400000, guid: 19ecbe5a38115409985fb91294c4ad4a, type: 2}
+  PanelHeader: {fileID: 2800000, guid: 2bd52729368d545728935c8a9f0a9ecf, type: 3}
+  PanelBody: {fileID: 2800000, guid: 8a6ba177d2ba145dcb62e1a8c3590f33, type: 3}
+  PanelFooter: {fileID: 2800000, guid: 727df2ba72bfc48c197c27888acafbec, type: 3}
+  PanelHeight: 480
+  CoinsButtonPos: {x: 240, y: 120}
+  ItemsButtonPos: {x: 60, y: 120}
+  InitialPriceItemPos: {x: 40.9000015, y: 200}
+  PriceItemPosDelta: {x: 0, y: 45}
+  PriceItemSize: {x: 357, y: 40}
+  PriceItemFirstIconPos: {x: 9, y: 4}
+  PriceItemSecondIconPos: {x: 182, y: 4}
+  PriceItemSecondTextPos: 165
+  PriceItemCoinTexture: {fileID: 2800000, guid: bfacdb82e9b674151a1528500283d3b7,
+    type: 3}
+  PriceItemBombTexture: {fileID: 2800000, guid: d7981655a16e64d05aab66a05554b04e,
+    type: 3}
+  PriceItemLifeTexture: {fileID: 2800000, guid: 53608e52cc351465bb9c346129107a31,
+    type: 3}
+  PayWithMobileTexture: {fileID: 2800000, guid: ae1f79a49d8574c0a90f775b2cfa4d4a,
+    type: 3}
+  PayWithMobilePos: {x: 131.399994, y: 400.100006}
+  PayByMobileTextRect:
+    serializedVersion: 2
+    x: 132
+    y: 414
+    width: 198
+    height: 37
+  PayByMobileRect:
+    serializedVersion: 2
+    x: 156
+    y: 409
+    width: 165
+    height: 46
+  CloseButtonRect:
+    serializedVersion: 2
+    x: 420
+    y: 16
+    width: 37
+    height: 37
+  BombsRect:
+    serializedVersion: 2
+    x: 240.630005
+    y: 80
+    width: 0
+    height: 0
+  LivesRect:
+    serializedVersion: 2
+    x: 330.160004
+    y: 80
+    width: 0
+    height: 0
+  CoinsRect:
+    serializedVersion: 2
+    x: 151
+    y: 80
+    width: 0
+    height: 0
