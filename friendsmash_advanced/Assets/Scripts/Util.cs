@@ -11,6 +11,7 @@ public class Util : ScriptableObject
         string query = width != null ? "&width=" + width.ToString() : "";
         query += height != null ? "&height=" + height.ToString() : "";
         query += type != null ? "&type=" + type : "";
+        query += "&redirect=false";
         if (query != "") url += ("?g" + query);
         return url;
     }
@@ -72,7 +73,27 @@ public class Util : ScriptableObject
         }
         return friends;
     }
-    
+
+    public static string DeserializePictureURLString(string response)
+    {
+        return DeserializePictureURLObject(Json.Deserialize(response));
+    }
+
+    public static string DeserializePictureURLObject(object pictureObj)
+    {
+        
+        
+        var picture = (Dictionary<string, object>)(((Dictionary<string, object>)pictureObj)["data"]);
+        object urlH = null;
+        if (picture.TryGetValue("url", out urlH))
+        {
+            return (string)urlH;
+        }
+        
+        return null;
+    }
+
+
     
     
     public static void DrawActualSizeTexture (Vector2 pos, Texture texture, float scale = 1.0f)
@@ -85,4 +106,23 @@ public class Util : ScriptableObject
         Rect rect = new Rect (pos.x, pos.y, Screen.width, Screen.height);
         GUI.Label (rect, text, style);
     }
+
+    private static void JavascriptLog(string msg)
+    {
+        Application.ExternalCall("console.log", msg);
+    }
+
+    public static void Log (string message)
+    {
+        Debug.Log(message);
+        if (Application.isWebPlayer)
+            JavascriptLog(message);
+    }
+    public static void LogError (string message)
+    {
+        Debug.LogError(message);
+        if (Application.isWebPlayer)
+            JavascriptLog(message);
+    }
+    
 }

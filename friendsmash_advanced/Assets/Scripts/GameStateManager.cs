@@ -113,25 +113,25 @@ public class GameStateManager : MonoBehaviour
         {
             Destroy(t);
         }
-        FbDebug.Log("EndGame Instance.highScore = " + Instance.highScore + "\nInstance.score = " + Instance.score);
+        Util.Log("EndGame Instance.highScore = " + Instance.highScore + "\nInstance.score = " + Instance.score);
 
         if (FB.IsLoggedIn && Instance.highScore.HasValue && Instance.highScore < Instance.score) // don't allow high score to be set unless we've read it from FB (-1 check)
         {
             Instance.highScore = Instance.score;
-            FbDebug.Log("Player has new high score :" + Instance.score);
+            Util.Log("Player has new high score :" + Instance.score);
             
             var query = new Dictionary<string, string>();
             query["score"] = Instance.score.ToString();
-            FB.API("/me/scores", Facebook.HttpMethod.POST, delegate(FBResult r) { FbDebug.Log("Result: " + r.Text); }, query);
+            FB.API("/me/scores", Facebook.HttpMethod.POST, delegate(FBResult r) { Util.Log("Result: " + r.Text); }, query);
         }
 
         
-        if (FB.IsLoggedIn)
+        if (FB.IsLoggedIn && !string.IsNullOrEmpty(GameStateManager.FriendID))
         {
             var querySmash = new Dictionary<string, string>();
             querySmash["profile"] = GameStateManager.FriendID;
             FB.API ("/me/" + FB.AppId + ":smash", Facebook.HttpMethod.POST, 
-            delegate(FBResult r) { FbDebug.Log("Result: " + r.Text); }, querySmash);
+            delegate(FBResult r) { Util.Log("Result: " + r.Text); }, querySmash);
         }
 
         Application.LoadLevel("MainMenu");

@@ -84,7 +84,7 @@ public class MainMenu : MonoBehaviour
     
     void Awake()
     {
-        FbDebug.Log("Awake");
+        Util.Log("Awake");
    
         paymentDialog = ((PaymentDialog)(GetComponent("PaymentDialog")));
 
@@ -131,11 +131,11 @@ public class MainMenu : MonoBehaviour
 
     private void SetInit()
     {
-        FbDebug.Log("SetInit");
+        Util.Log("SetInit");
         enabled = true; // "enabled" is a property inherited from MonoBehaviour
         if (FB.IsLoggedIn) 
         {
-            FbDebug.Log("Already logged in");
+            Util.Log("Already logged in");
             OnLoggedIn();
             loadingState = LoadingState.WAITING_FOR_INITIAL_PLAYER_DATA;
         }
@@ -147,7 +147,7 @@ public class MainMenu : MonoBehaviour
 
     private void OnHideUnity(bool isGameShown)
     {
-        FbDebug.Log("OnHideUnity");
+        Util.Log("OnHideUnity");
         if (!isGameShown)
         {
             // pause the game - we will need to hide
@@ -162,7 +162,7 @@ public class MainMenu : MonoBehaviour
     
     void LoginCallback(FBResult result)
     {
-        FbDebug.Log("LoginCallback");
+        Util.Log("LoginCallback");
         
         if (FB.IsLoggedIn)
         {
@@ -172,11 +172,12 @@ public class MainMenu : MonoBehaviour
 
     void OnLoggedIn()
     {
-        FbDebug.Log("Logged in. ID: " + FB.UserId);
+        Util.Log("Logged in. ID: " + FB.UserId);
 
         // Reqest player info and profile picture
         FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
-        FB.API(Util.GetPictureURL("me", 128, 128), Facebook.HttpMethod.GET, MyPictureCallback);
+        LoadPicture(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
+
         // Load high scores
         QueryScores();
         paymentDialog.OnLoggedIn();
@@ -189,10 +190,10 @@ public class MainMenu : MonoBehaviour
     
     void APICallback(FBResult result)
     {
-        FbDebug.Log("APICallback");
+        Util.Log("APICallback");
         if (result.Error != null)
         {
-            FbDebug.Error(result.Error);
+            Util.LogError(result.Error);
             // Let's just try again
             FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
             return;
@@ -204,19 +205,20 @@ public class MainMenu : MonoBehaviour
         checkIfUserDataReady();
     }
 
-    void MyPictureCallback(FBResult result)
+    void MyPictureCallback(Texture texture)
     {
-        FbDebug.Log("MyPictureCallback");
+        Util.Log("MyPictureCallback");
         
-        if (result.Error != null)
+        if (texture ==  null)
         {
-            FbDebug.Error(result.Error);
             // Let's just try again
-            FB.API(Util.GetPictureURL("me", 128, 128), Facebook.HttpMethod.GET, MyPictureCallback);
+            Util.LogError("Error loading user picture");
+            LoadPicture(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
+
             return;
         }
         
-        GameStateManager.UserTexture = result.Texture;
+        GameStateManager.UserTexture = texture;
         haveUserPicture = true;
         checkIfUserDataReady();
     }
@@ -229,10 +231,10 @@ public class MainMenu : MonoBehaviour
 
     void ScoresCallback(FBResult result) 
     {
-        FbDebug.Log("ScoresCallback");
+        Util.Log("ScoresCallback");
         if (result.Error != null)
         {
-            FbDebug.Error(result.Error);
+            Util.LogError(result.Error);
             return;
         }
 
@@ -250,10 +252,10 @@ public class MainMenu : MonoBehaviour
             {
                 // This entry is the current player
                 int playerHighScore = getScoreFromEntry(entry);
-                FbDebug.Log("Local players score on server is " + playerHighScore);
+                Util.Log("Local players score on server is " + playerHighScore);
                 if (playerHighScore < GameStateManager.Score)
                 {
-                    FbDebug.Log("Locally overriding with just acquired score: " + GameStateManager.Score);
+                    Util.Log("Locally overriding with just acquired score: " + GameStateManager.Score);
                     playerHighScore = GameStateManager.Score;
                 }
 
@@ -265,15 +267,11 @@ public class MainMenu : MonoBehaviour
             if (!friendImages.ContainsKey(userId))
             {
                 // We don't have this players image yet, request it now
-                FB.API(Util.GetPictureURL(userId, 128, 128), Facebook.HttpMethod.GET, pictureResult =>
+                LoadPicture(Util.GetPictureURL(userId, 128, 128),pictureTexture =>
                 {
-                    if (pictureResult.Error != null)
+                    if (pictureTexture != null)
                     {
-                        FbDebug.Error(pictureResult.Error);
-                    }
-                    else
-                    {
-                        friendImages.Add(userId, pictureResult.Texture);
+                        friendImages.Add(userId, pictureTexture);
                     }
                 });
             }
@@ -291,10 +289,10 @@ public class MainMenu : MonoBehaviour
     
     void checkIfUserDataReady()
     {
-        FbDebug.Log("checkIfUserDataReady");
+        Util.Log("checkIfUserDataReady");
         if (loadingState == LoadingState.WAITING_FOR_INITIAL_PLAYER_DATA && haveUserPicture && !string.IsNullOrEmpty(GameStateManager.Username))
         {
-          FbDebug.Log("user data ready");
+          Util.Log("user data ready");
           loadingState = LoadingState.DONE;
         }
     }
@@ -303,10 +301,10 @@ public class MainMenu : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        FbDebug.Log("OnLevelWasLoaded");
+        Util.Log("OnLevelWasLoaded");
         if (level == mainMenuLevel && loadingState == LoadingState.DONE)
         {
-            FbDebug.Log("Returned to main menu");
+            Util.Log("Returned to main menu");
             // We've returned to the main menu so let's query the scores again
             if (FB.IsLoggedIn)
                 QueryScores();
@@ -315,7 +313,7 @@ public class MainMenu : MonoBehaviour
 
     void OnApplicationFocus( bool hasFocus ) 
     {
-      FbDebug.Log ("hasFocus " + (hasFocus ? "Y" : "N"));
+      Util.Log ("hasFocus " + (hasFocus ? "Y" : "N"));
     }
 
     // Convenience function to check if mouse/touch is the tournament area
@@ -592,14 +590,15 @@ public class MainMenu : MonoBehaviour
 
     private void onPlayClicked()
     {
-        FbDebug.Log("onPlayClicked");
+        Util.Log("onPlayClicked");
         if (friends != null && friends.Count > 0)
         {
             // Select a random friend and get their picture
             Dictionary<string, string> friend = Util.RandomFriend(friends);
             GameStateManager.FriendName = friend["first_name"];
             GameStateManager.FriendID = friend["id"];
-            FB.API(Util.GetPictureURL((string)friend["id"], 128, 128), Facebook.HttpMethod.GET, Util.FriendPictureCallback);
+
+            LoadPicture(Util.GetPictureURL((string)friend["id"], 128, 128),FriendPictureCallback);
         }
         
         // Start the main game
@@ -608,7 +607,7 @@ public class MainMenu : MonoBehaviour
     }
     private void onBragClicked()
     {
-        FbDebug.Log("onBragClicked");
+        Util.Log("onBragClicked");
         FB.Feed(
                 linkCaption: "I just smashed " + GameStateManager.Score.ToString() + " friends! Can you beat it?",
                 picture: "http://www.friendsmash.com/images/logo_large.jpg",
@@ -618,7 +617,7 @@ public class MainMenu : MonoBehaviour
     }
     private void onChallengeClicked()
     {
-        FbDebug.Log("onChallengeClicked");
+        Util.Log("onChallengeClicked");
         if (GameStateManager.Score != 0 && GameStateManager.FriendID != null)
         {
             string[] recipient = { GameStateManager.FriendID };
@@ -644,20 +643,20 @@ public class MainMenu : MonoBehaviour
     }
     private void appRequestCallback (FBResult result)
     {
-        FbDebug.Log("appRequestCallback");
+        Util.Log("appRequestCallback");
         if (result != null)
         {
             var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
             object obj = 0;
             if (responseObject.TryGetValue ("cancelled", out obj))
             {
-                FbDebug.Log("Request cancelled");
+                Util.Log("Request cancelled");
             }
             else if (responseObject.TryGetValue ("request", out obj))
             {
                 AddPopupMessage("Request Sent", ChallengeDisplayTime);
                 
-                FbDebug.Log("Request sent");
+                Util.Log("Request sent");
             }
         }
     }
@@ -672,5 +671,35 @@ public class MainMenu : MonoBehaviour
         {
             Screen.SetResolution ((int)CanvasSize.x, (int)CanvasSize.y, false);
         }
+    }
+
+    public static void FriendPictureCallback(Texture texture)
+    {
+        GameStateManager.FriendTexture = texture;
+    }
+
+    delegate void LoadPictureCallback (Texture texture);
+
+
+    IEnumerator LoadPictureEnumerator(string url, LoadPictureCallback callback)    
+    {
+        WWW www = new WWW(url);
+        yield return www;
+        callback(www.texture);
+    }
+    void LoadPicture (string url, LoadPictureCallback callback)
+    {
+        FB.API(url,Facebook.HttpMethod.GET,result =>
+        {
+            if (result.Error != null)
+            {
+                Util.LogError(result.Error);
+                return;
+            }
+
+            var imageUrl = Util.DeserializePictureURLString(result.Text);
+
+            StartCoroutine(LoadPictureEnumerator(imageUrl,callback));
+        });
     }
 }

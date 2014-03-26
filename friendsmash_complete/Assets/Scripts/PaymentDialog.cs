@@ -87,13 +87,7 @@ public class PaymentDialog : MonoBehaviour
 		public bool valid;							// Whether this data had been set based on data from URL
 	}
 
-	CoinPackage[] coinPackages = new CoinPackage[]
-	{
-		new CoinPackage {numCoins = 10 ,objectID = "606105986126348"},
-		new CoinPackage {numCoins = 25 ,objectID = "1462543077296066"},
-		new CoinPackage {numCoins = 50 ,objectID = "1406392606286077"},
-		new CoinPackage {numCoins = 100,objectID = "217759015086426"}
-	};
+	CoinPackage[] coinPackages = new CoinPackage[0];
 
 	CoinPackage activeCoinPackage;    // Package for which a transaction is currently is process
 
@@ -243,130 +237,24 @@ public class PaymentDialog : MonoBehaviour
 
 	public void OnLoggedIn()
 	{
-		GetPackagePrices();
-		GetUserCurrency();
-		GetMobilePricePoints();
 	}
 
 	
 
-	void GetUserCurrency() 
-	{
-		FB.API("/me/?fields=currency", Facebook.HttpMethod.GET, delegate(FBResult response) 
-		{
-			if (string.IsNullOrEmpty(response.Error) && DeserializeUserCurrency(response.Text,out userCurrency, out userCurrencyUSDExchangeInverse)) 
-			{
-				Util.Log("Have user currency");
-				haveUserCurrency = true;
-			  	CheckIfHaveAllPaymentData();
-			}
-			else
-			{
-				Util.Log("Error retrieving user currency");
-			}
-	    });
-	}
 
 	
-	void GetMobilePricePoints() 
-	{
-		FB.API("/me/?fields=payment_mobile_pricepoints", Facebook.HttpMethod.GET, delegate(FBResult response) 
-		{
-			if (string.IsNullOrEmpty(response.Error) && DeserializeMobilePricePoints(response.Text,mobilePricePoints)) 
-			{
-				haveMobilePricePoints = true;
-				Util.Log("Have mobile price points");
-				CheckIfHaveAllPaymentData();
-			}
-			else
-			{
-				Util.Log("Error retrieving mobile price points");
-			}
-		});
-	}
 
-	FacebookDelegate MakeCoinPackageDelegate(int i)
-	{
-		return delegate(FBResult response){
-    		if (string.IsNullOrEmpty(response.Error) && DeserializeCoinPackage(response.Text, ref coinPackages[i]))
-    		{
-	    		numCoinPackagesReturned++;
-	    		CheckIfHaveAllPaymentData();
-	    	}
-	    };
-	}
-	
-	void GetPackagePrices() 
-	{
-		Util.Log("Fetching package prices");
-  		for (int i = 0; i < coinPackages.Length; i ++)
-  		{
-  			coinPackages[i].price = new Dictionary<string,double>();
-	  		FB.API(""+coinPackages[i].objectID+"",Facebook.HttpMethod.GET, MakeCoinPackageDelegate(i));
-	    }
-	}
 
 
 	
 	void CheckIfHaveAllPaymentData() 
 	{
-  		if (haveUserCurrency && haveMobilePricePoints && numCoinPackagesReturned == coinPackages.Length)
-  		{
-  			if (localPricesCalculated) 
-  			{
-  				Util.LogError("local prices already calculated");
-  				return;
-  			}
-
-  			CalculateLocalPrices();
-  			localPricesCalculated = true;
-  			SetupMobilePricePoints();
-  			
-  		}
 	}
 	
 
-	void CalculateLocalPrices()
-	{
-		Util.Log("CalculateLocalPrices exchange rate = " + userCurrencyUSDExchangeInverse);
-		for (int i = 0; i < coinPackages.Length; i++) 
-		{
-			double price;
-			if (coinPackages[i].price.TryGetValue(userCurrency, out price))
-			{
-				coinPackages[i].localPrice = price;
-			}
-			else if (coinPackages[i].price.TryGetValue("USD", out price))
-			{
-				coinPackages[i].localPrice = price * userCurrencyUSDExchangeInverse;
-			} 
-			else 
-			{
-				coinPackages[i].valid = false;
-			}
-		}
-	}
 
 	
 
-	void SetupMobilePricePoints()
-	{
-		Util.Log("SetupMobilePricePoints");
-		for (int i = 0; i < coinPackages.Length; i++) 
-		{
-			if (coinPackages[i].valid) 
-			{
-				for (int j = 0; j < mobilePricePoints.Count; j++) 
-				{
-					if (mobilePricePoints[j].payoutAmount > coinPackages[i].localPrice && mobilePricePoints[j].currency.Equals(userCurrency,StringComparison.OrdinalIgnoreCase))
-					{
-						coinPackages[i].mobilePricePoint = mobilePricePoints[j];
-						break;
-					}
-				}
-			}
-		}
-	}
 
 
 	// GUI //
@@ -486,39 +374,7 @@ public class PaymentDialog : MonoBehaviour
 		}
 	}
 	
-	void PaymentCallback(FBResult response)
-	{
-		string paymentId;
-		if (string.IsNullOrEmpty(response.Error) && DeserializePaymentResponse(response.Text,out paymentId)) 
-		{
-			Util.Log("Payment complete");
-			Util.Log("Payment id:" + paymentId);
-			mainMenu.CoinBalance += activeCoinPackage.numCoins;
-			DialogEnabled = false; // hide dialog
-			mainMenu.AddPopupMessage("Purchase Complete",2);
-		}
-		else
-		{
-			Util.Log("Payment error");
-		}
-	}
-	
-	void OnBuyCoins(CoinPackage priceData)
-	{
-		Util.Log("OnBuyCoins");
-		activeCoinPackage = priceData;
-		mainMenu.SetFullscreenMode(false);
-		FB.Canvas.Pay(priceData.url, "purchaseitem",1, callback:PaymentCallback);
-	}
 
-	void OnBuyMobilePricePoint(MobilePricePoint pricePoint, CoinPackage priceData)
-	{
-		Util.Log("OnBuyCoins mobile priceid = " + pricePoint.id);
-		activeCoinPackage = priceData;
-		mainMenu.SetFullscreenMode(false);
-		FB.Canvas.Pay(priceData.url, "purchaseitem",1, pricepointId:pricePoint.id, callback:PaymentCallback);
-		
-	}
 
 	void AddProductToBalance(ProductData productData)
 	{
@@ -553,49 +409,14 @@ public class PaymentDialog : MonoBehaviour
 
 	void DrawCoinOptions() 
 	{
-		// Don't show any prices if we haven't recieved all the callbacks yet
-		if (!localPricesCalculated)
-			return;
 
-		if (mobilePaymentsTab)
-		{
-			DrawMobilePaymentOptions();
-			return;
-		}
 
 		BeginDrawPriceItems();
 		
-		foreach (CoinPackage item in coinPackages)
-		{
-			if (item.valid)
-			{
-				if (DrawPriceItem(PriceItemCoinTexture,string.Format ("{0} Coins",item.numCoins), PriceItemCoinTexture, FormatPrice(item.localPrice,currencyDataTable[userCurrency])))
-				{
-					OnBuyCoins(item);
-				}
-			}
-		}
 
-		if (DrawMobilePaymentButton())
-			mobilePaymentsTab = true;
 			
 	}
 	
-	void DrawMobilePaymentOptions() 
-	{
-		BeginDrawPriceItems();
-		
-		foreach (CoinPackage item in coinPackages)
-		{
-			if (item.valid && !string.IsNullOrEmpty(item.mobilePricePoint.id))
-			{
-				if (DrawPriceItem(PriceItemCoinTexture,string.Format ("{0} Coins",item.numCoins), PriceItemCoinTexture, 
-							    	FormatPrice(item.mobilePricePoint.payerAmount,currencyDataTable[userCurrency]))){
-					OnBuyMobilePricePoint(item.mobilePricePoint,item);
-				}
-			}
-		}
-	}
 	
 
 	void DrawProductOptions() 
