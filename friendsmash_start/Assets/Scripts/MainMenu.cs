@@ -38,8 +38,13 @@ public class MainMenu : MonoBehaviour
     public float TournamentStep;                // Spacing between tournament entries
     public float MouseScrollStep = 40;          // Amount score table moves with each step of the mouse wheel
 
+    public PaymentDialog paymentDialog;
+
     public GUISkin MenuSkin;           
 
+    public int CoinBalance;
+    public int NumLives;
+    public int NumBombs;
 
 
     //   Private members   //
@@ -59,17 +64,22 @@ public class MainMenu : MonoBehaviour
     
     
     private bool    haveUserPicture       = false;
-    private float   lastChallengeSentTime = 0;
     private float   tournamentLength      = 0;
     private int     tournamentWidth       = 512;
 
     private int     mainMenuLevel         = 0; // Level index of main menu
 
+    private string popupMessage;
+    private float popupTime;
+    private float popupDuration;
+
     
     void Awake()
     {
-        FbDebug.Log("Awake");
+        Util.Log("Awake");
    
+        paymentDialog = ((PaymentDialog)(GetComponent("PaymentDialog")));
+
         // allow only one instance of the Main Menu
         if (instance != null && instance != this)
         {
@@ -124,10 +134,10 @@ public class MainMenu : MonoBehaviour
 
     void ScoresCallback(FBResult result) 
     {
-        FbDebug.Log("ScoresCallback");
+        Util.Log("ScoresCallback");
         if (result.Error != null)
         {
-            FbDebug.Error(result.Error);
+            Util.LogError(result.Error);
             return;
         }
 
@@ -145,10 +155,10 @@ public class MainMenu : MonoBehaviour
             {
                 // This entry is the current player
                 int playerHighScore = getScoreFromEntry(entry);
-                FbDebug.Log("Local players score on server is " + playerHighScore);
+                Util.Log("Local players score on server is " + playerHighScore);
                 if (playerHighScore < GameStateManager.Score)
                 {
-                    FbDebug.Log("Locally overriding with just acquired score: " + GameStateManager.Score);
+                    Util.Log("Locally overriding with just acquired score: " + GameStateManager.Score);
                     playerHighScore = GameStateManager.Score;
                 }
 
@@ -160,15 +170,11 @@ public class MainMenu : MonoBehaviour
             if (!friendImages.ContainsKey(userId))
             {
                 // We don't have this players image yet, request it now
-                FB.API(Util.GetPictureURL(userId, 128, 128), Facebook.HttpMethod.GET, pictureResult =>
+                LoadPicture(Util.GetPictureURL(userId, 128, 128),pictureTexture =>
                 {
-                    if (pictureResult.Error != null)
+                    if (pictureTexture != null)
                     {
-                        FbDebug.Error(pictureResult.Error);
-                    }
-                    else
-                    {
-                        friendImages.Add(userId, pictureResult.Texture);
+                        friendImages.Add(userId, pictureTexture);
                     }
                 });
             }
@@ -187,7 +193,7 @@ public class MainMenu : MonoBehaviour
 
     void OnApplicationFocus( bool hasFocus ) 
     {
-      FbDebug.Log ("hasFocus " + (hasFocus ? "Y" : "N"));
+      Util.Log ("hasFocus " + (hasFocus ? "Y" : "N"));
     }
 
     // Convenience function to check if mouse/touch is the tournament area
@@ -263,6 +269,10 @@ public class MainMenu : MonoBehaviour
         bool result = GUI.Button(new Rect (buttonPos.x,buttonPos.y, ButtonTexture.width * ButtonScale, ButtonTexture.height * ButtonScale),text,MenuSkin.GetStyle("menu_button"));
         Util.DrawActualSizeTexture(ButtonLogoOffset*ButtonScale+buttonPos,texture,ButtonScale);
         buttonPos.y += ButtonTexture.height*ButtonScale + ButtonYGap;
+        
+        if (paymentDialog.DialogEnabled)
+            result = false;
+
         return result;
     }
 
@@ -320,9 +330,9 @@ public class MainMenu : MonoBehaviour
             // Draw resources bar
             Util.DrawActualSizeTexture(ResourcePos,ResourcesTexture);
              
-            Util.DrawSimpleText(ResourcePos + new Vector2(47,5)  ,MenuSkin.GetStyle("resources_text"),"0");
-            Util.DrawSimpleText(ResourcePos + new Vector2(137,5) ,MenuSkin.GetStyle("resources_text"),"0");
-            Util.DrawSimpleText(ResourcePos + new Vector2(227,5) ,MenuSkin.GetStyle("resources_text"),"0");
+            Util.DrawSimpleText(ResourcePos + new Vector2(47,5)  ,MenuSkin.GetStyle("resources_text"),string.Format("{0}",CoinBalance));
+            Util.DrawSimpleText(ResourcePos + new Vector2(137,5) ,MenuSkin.GetStyle("resources_text"),string.Format("{0}",NumBombs));
+            Util.DrawSimpleText(ResourcePos + new Vector2(227,5) ,MenuSkin.GetStyle("resources_text"),string.Format("{0}",NumLives));
         }
         
      
@@ -331,24 +341,44 @@ public class MainMenu : MonoBehaviour
         if (Screen.fullScreen)
         {
             if (DrawButton("Full Screen",FullScreenActiveTexture))
-                Screen.fullScreen = false;
+                SetFullscreenMode(false);
         }
         else 
         {
             if (DrawButton("Full Screen",FullScreenTexture))
-                Screen.fullScreen = true;
+                SetFullscreenMode(true);
         }
         #endif
         
         
-        if (lastChallengeSentTime != 0 && lastChallengeSentTime + ChallengeDisplayTime > Time.realtimeSinceStartup)
-        {
-            // Show message that we sent a request
-            GUI.Label(new Rect(0,0,Screen.width,Screen.height), "Request Sent", MenuSkin.GetStyle("centred_text"));        
-        }
+
+        DrawPopupMessage();
+        
             
     }
-    
+
+
+    public void AddPopupMessage(string message, float duration)
+    {
+        popupMessage = message;
+        popupTime = Time.realtimeSinceStartup;
+        popupDuration = duration;
+    }
+    public void DrawPopupMessage()
+    {
+        if (popupTime != 0 && popupTime + popupDuration > Time.realtimeSinceStartup)
+        {
+            // Show message that we sent a request
+            Rect PopupRect = new Rect();
+            PopupRect.width = 800;
+            PopupRect.height = 100;
+            PopupRect.x = Screen.width / 2 - PopupRect.width / 2;
+            PopupRect.y = Screen.height / 2 - PopupRect.height / 2;
+            GUI.Box(PopupRect,"",MenuSkin.GetStyle("box"));
+            GUI.Label(PopupRect, popupMessage, MenuSkin.GetStyle("centred_text"));        
+        }
+
+    }
 
     void TournamentGui() 
     {
@@ -402,18 +432,61 @@ public class MainMenu : MonoBehaviour
 
     private void onPlayClicked()
     {
-        FbDebug.Log("onPlayClicked");
+        Util.Log("onPlayClicked");
         if (friends != null && friends.Count > 0)
         {
             // Select a random friend and get their picture
             Dictionary<string, string> friend = Util.RandomFriend(friends);
             GameStateManager.FriendName = friend["first_name"];
             GameStateManager.FriendID = friend["id"];
-            FB.API(Util.GetPictureURL((string)friend["id"], 128, 128), Facebook.HttpMethod.GET, Util.FriendPictureCallback);
+
+            LoadPicture(Util.GetPictureURL((string)friend["id"], 128, 128),FriendPictureCallback);
         }
         
         // Start the main game
         Application.LoadLevel("GameStage");
         GameStateManager.Instance.StartGame();
+    }
+
+    public void SetFullscreenMode (bool on)
+    {
+        if (on)
+        {
+            Screen.SetResolution (Screen.currentResolution.width, Screen.currentResolution.height, true);
+        }
+        else
+        {
+            Screen.SetResolution ((int)CanvasSize.x, (int)CanvasSize.y, false);
+        }
+    }
+
+    public static void FriendPictureCallback(Texture texture)
+    {
+        GameStateManager.FriendTexture = texture;
+    }
+
+    delegate void LoadPictureCallback (Texture texture);
+
+
+    IEnumerator LoadPictureEnumerator(string url, LoadPictureCallback callback)    
+    {
+        WWW www = new WWW(url);
+        yield return www;
+        callback(www.texture);
+    }
+    void LoadPicture (string url, LoadPictureCallback callback)
+    {
+        FB.API(url,Facebook.HttpMethod.GET,result =>
+        {
+            if (result.Error != null)
+            {
+                Util.LogError(result.Error);
+                return;
+            }
+
+            var imageUrl = Util.DeserializePictureURLString(result.Text);
+
+            StartCoroutine(LoadPictureEnumerator(imageUrl,callback));
+        });
     }
 }

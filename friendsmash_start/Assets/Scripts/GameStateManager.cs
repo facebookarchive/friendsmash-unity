@@ -113,11 +113,11 @@ public class GameStateManager : MonoBehaviour
         {
             Destroy(t);
         }
-        FbDebug.Log("EndGame Instance.highScore = " + Instance.highScore + "\nInstance.score = " + Instance.score);
+        Util.Log("EndGame Instance.highScore = " + Instance.highScore + "\nInstance.score = " + Instance.score);
 
 
         Instance.highScore = Instance.score;
-        FbDebug.Log("Player has new high score :" + Instance.score);
+        Util.Log("Player has new high score :" + Instance.score);
         
 
         Application.LoadLevel("MainMenu");
