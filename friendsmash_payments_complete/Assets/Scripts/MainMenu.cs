@@ -212,7 +212,6 @@ public class MainMenu : MonoBehaviour
         if (texture ==  null)
         {
             // Let's just try again
-            Util.LogError("Error loading user picture");
             LoadPicture(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
 
             return;
@@ -635,6 +634,9 @@ public class MainMenu : MonoBehaviour
         else
         {
             FB.AppRequest(
+                to: null,
+                filters : "",
+                excludeIds : null,
                 message: "Friend Smash is smashing! Check it out.",
                 title: "Play Friend Smash with me!",
                 callback:appRequestCallback
