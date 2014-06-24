@@ -14,6 +14,7 @@ public class GameStateManager : MonoBehaviour
     private string username = null;
     public static Texture UserTexture;
     public static Texture FriendTexture = null;
+    public static int CelebFriend = -1;
     private string friendName = null;
     private string friendID = null;
 

@@ -16,16 +16,6 @@ public class Util : ScriptableObject
         return url;
     }
 
-    public static void FriendPictureCallback(FBResult result)
-    {
-        if (result.Error != null)
-        {
-            Debug.LogError(result.Error);
-            return;
-        }
-
-        GameStateManager.FriendTexture = result.Texture;
-    }
 
     public static Dictionary<string, string> RandomFriend(List<object> friends)
     {

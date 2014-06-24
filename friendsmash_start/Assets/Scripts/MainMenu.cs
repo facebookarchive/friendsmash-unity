@@ -46,6 +46,10 @@ public class MainMenu : MonoBehaviour
     public int NumLives;
     public int NumBombs;
 
+    public Texture[] CelebTextures;
+    public string [] CelebNames;
+
+
 
     //   Private members   //
 
@@ -439,8 +443,14 @@ public class MainMenu : MonoBehaviour
             Dictionary<string, string> friend = Util.RandomFriend(friends);
             GameStateManager.FriendName = friend["first_name"];
             GameStateManager.FriendID = friend["id"];
-
+            GameStateManager.CelebFriend = -1;
             LoadPicture(Util.GetPictureURL((string)friend["id"], 128, 128),FriendPictureCallback);
+        }
+        else
+        {
+            //We can't access friends
+            GameStateManager.CelebFriend = UnityEngine.Random.Range(0,CelebTextures.Length - 1);
+            GameStateManager.FriendName = CelebNames[GameStateManager.CelebFriend];
         }
         
         // Start the main game

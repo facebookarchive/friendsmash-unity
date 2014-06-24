@@ -141,8 +141,11 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
   m_HDR: 0
   m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!4 &491552207
 Transform:
   m_ObjectHideFlags: 0
@@ -154,6 +157,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!1 &2077195017
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +186,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 1
 --- !u!114 &2077195019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +227,28 @@ MonoBehaviour:
   CoinBalance: 0
   NumLives: 0
   NumBombs: 0
+  CelebTextures:
+  - {fileID: 2800000, guid: 0ab4831d71dee4ab7a5875f73f5ade1a, type: 3}
+  - {fileID: 2800000, guid: 36df35d8da60948b1907594105506598, type: 3}
+  - {fileID: 2800000, guid: 51b7c5f99732b4e4d9a8f1b10b0b1a3d, type: 3}
+  - {fileID: 2800000, guid: 1763cb1c4c548496391d72ffb453cf31, type: 3}
+  - {fileID: 2800000, guid: b25bc993f26fc46dba96990660e4a1a1, type: 3}
+  - {fileID: 2800000, guid: ccf18164baeee4a67b47ad6755877fdd, type: 3}
+  - {fileID: 2800000, guid: 4c0f74174a23c46b582b0daf1fb603bc, type: 3}
+  - {fileID: 2800000, guid: 392a3ee99bc334a94b73593e0975a7a1, type: 3}
+  - {fileID: 2800000, guid: 4e5d478c0aec44e8a9f5d86f75ff8245, type: 3}
+  - {fileID: 2800000, guid: 781542d34785547459298b0dea07a221, type: 3}
+  CelebNames:
+  - Einstein
+  - Xzibit
+  - Goldsmith
+  - Sinatra
+  - George
+  - Jacko
+  - Rick
+  - Keanu
+  - Arnie
+  - Jean-Luc
 --- !u!114 &2077195020
 MonoBehaviour:
   m_ObjectHideFlags: 0
