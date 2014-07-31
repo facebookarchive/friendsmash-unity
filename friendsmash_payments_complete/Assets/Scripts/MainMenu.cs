@@ -173,14 +173,15 @@ public class MainMenu : MonoBehaviour
             OnLoggedIn();
         }
     }
+    string meQueryString = "/v2.0/me?fields=id,first_name,friends.limit(100).fields(first_name,id,picture.width(128).height(128)),invitable_friends.limit(100).fields(first_name,id,picture.width(128).height(128))";
 
     void OnLoggedIn()
     {
         Util.Log("Logged in. ID: " + FB.UserId);
 
         // Reqest player info and profile picture
-        FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
-        LoadPicture(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
+        FB.API(meQueryString, Facebook.HttpMethod.GET, APICallback);
+        LoadPictureAPI(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
 
         // Load high scores
         QueryScores();
@@ -199,7 +200,7 @@ public class MainMenu : MonoBehaviour
         {
             Util.LogError(result.Error);
             // Let's just try again
-            FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
+            FB.API(meQueryString, Facebook.HttpMethod.GET, APICallback);
             return;
         }
         
@@ -216,7 +217,7 @@ public class MainMenu : MonoBehaviour
         if (texture ==  null)
         {
             // Let's just try again
-            LoadPicture(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
+            LoadPictureAPI(Util.GetPictureURL("me", 128, 128),MyPictureCallback);
 
             return;
         }
@@ -270,7 +271,7 @@ public class MainMenu : MonoBehaviour
             if (!friendImages.ContainsKey(userId))
             {
                 // We don't have this players image yet, request it now
-                LoadPicture(Util.GetPictureURL(userId, 128, 128),pictureTexture =>
+                LoadPictureAPI(Util.GetPictureURL(userId, 128, 128),pictureTexture =>
                 {
                     if (pictureTexture != null)
                     {
@@ -419,7 +420,7 @@ public class MainMenu : MonoBehaviour
             GUI.Label( (new Rect(179 , 11, 287, 160)), "Login to Facebook", MenuSkin.GetStyle("text_only"));
             if (GUI.Button(LoginButtonRect, "", MenuSkin.GetStyle("button_login")))
             {
-                FB.Login("email,publish_actions", LoginCallback);
+                FB.Login("public_profile,user_friends,email,publish_actions", LoginCallback);
             }
         }
         
@@ -601,7 +602,7 @@ public class MainMenu : MonoBehaviour
             GameStateManager.FriendName = friend["first_name"];
             GameStateManager.FriendID = friend["id"];
             GameStateManager.CelebFriend = -1;
-            LoadPicture(Util.GetPictureURL((string)friend["id"], 128, 128),FriendPictureCallback);
+            LoadPictureURL(friend["image_url"],FriendPictureCallback);
         }
         else
         {
@@ -699,7 +700,7 @@ public class MainMenu : MonoBehaviour
         yield return www;
         callback(www.texture);
     }
-    void LoadPicture (string url, LoadPictureCallback callback)
+    void LoadPictureAPI (string url, LoadPictureCallback callback)
     {
         FB.API(url,Facebook.HttpMethod.GET,result =>
         {
@@ -714,4 +715,10 @@ public class MainMenu : MonoBehaviour
             StartCoroutine(LoadPictureEnumerator(imageUrl,callback));
         });
     }
+    void LoadPictureURL (string url, LoadPictureCallback callback)
+    {
+        StartCoroutine(LoadPictureEnumerator(url,callback));
+       
+    }
+
 }

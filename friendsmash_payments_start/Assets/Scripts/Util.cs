@@ -19,10 +19,13 @@ public class Util : ScriptableObject
 
     public static Dictionary<string, string> RandomFriend(List<object> friends)
     {
-        var fd = ((Dictionary<string, object>)(friends[Random.Range(0, friends.Count - 1)]));
+        var fd = ((Dictionary<string, object>)(friends[Random.Range(0, friends.Count)]));
         var friend = new Dictionary<string, string>();
         friend["id"] = (string)fd["id"];
         friend["first_name"] = (string)fd["first_name"];
+        var pictureDict = ((Dictionary<string, object>)(fd["picture"]));
+        var pictureDataDict = ((Dictionary<string, object>)(pictureDict["data"]));
+        friend["image_url"] = (string)pictureDataDict["url"];
         return friend;
     }
 
@@ -57,9 +60,13 @@ public class Util : ScriptableObject
         var responseObject = Json.Deserialize(response) as Dictionary<string, object>;
         object friendsH;
         var friends = new List<object>();
-        if (responseObject.TryGetValue("friends", out friendsH))
+        if (responseObject.TryGetValue("invitable_friends", out friendsH))
         {
             friends = (List<object>)(((Dictionary<string, object>)friendsH)["data"]);
+        }
+        if (responseObject.TryGetValue("friends", out friendsH))
+        {
+            friends.AddRange((List<object>)(((Dictionary<string, object>)friendsH)["data"]));
         }
         return friends;
     }
