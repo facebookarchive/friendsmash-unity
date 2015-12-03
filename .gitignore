@@ -1,9 +1,37 @@
-friendsmash_payments_start/OG/
-friendsmash_payments_complete/OG/
-*Assembly-CSharp*
-*/Assets/Examples*
-*/Assets/Facebook*
-*/Assets/Plugins*
-*/Library*
-*.sln
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+[Ll]ibrary/
+[Dd]ebug/
+[Rr]elease/
+sysinfo.txt
+*.stackdump
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+.vs/
 *.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln*
+*.user
+*.unityproj
+*.booproj
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+[Tt]humbs.db
+Desktop.ini
