@@ -54,7 +54,13 @@ static char* FBUnityMakeStringCopy (const char* string)
                    error:(NSError *)error
                requestId:(int)requestId
 {
-  [self sendErrorToUnity:unityMessage errorMessage:[error localizedDescription] requestId:requestId];
+  NSString *errorMessage =
+    error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?:
+    error.userInfo[FBSDKErrorDeveloperMessageKey] ?:
+    error.localizedDescription;
+  [self sendErrorToUnity:unityMessage
+            errorMessage:errorMessage
+               requestId:requestId];
 }
 
 + (void)sendErrorToUnity:(NSString *)unityMessage

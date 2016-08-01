@@ -8,14 +8,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25d16bd96ce334bc4b521072c4441caa, type: 3}
+  m_Script: {fileID: -948257129, guid: 27422eaa46c114a7f8873ea027c33fcd, type: 3}
   m_Name: FacebookSettings
   m_EditorClassIdentifier: 
   selectedAppIndex: 0
   appIds:
   - 523164037733626
   appLabels:
-  - App Name
+  - Friend Smash Unity
   cookie: 1
   logging: 1
   status: 1
